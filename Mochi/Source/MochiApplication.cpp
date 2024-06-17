@@ -5,6 +5,7 @@ namespace Mochi
 	bool MochiApplication::Init(const MochiApplicationInfo& info)
 	{
 		m_ApplicationInfo = info;
+		m_Running = true;
 		if (!InitGlfw())
 			return false;
 		return true;
@@ -12,7 +13,7 @@ namespace Mochi
 
 	void MochiApplication::Run()
 	{
-		while (!glfwWindowShouldClose(m_Window))
+		while (m_Running)
 		{
 			glfwPollEvents();
 			glClear(GL_COLOR_BUFFER_BIT);
@@ -24,6 +25,17 @@ namespace Mochi
 	void MochiApplication::Shutdown()
 	{
 		ShutdownGlfw();
+	}
+
+	void MochiApplication::Close()
+	{
+		if (CanCloseNow())
+			m_Running = false;
+	}
+
+	bool MochiApplication::CanCloseNow()
+	{
+		return true;
 	}
 
 	bool MochiApplication::InitGlfw()
@@ -44,10 +56,17 @@ namespace Mochi
 
 		glViewport(0, 0, m_ApplicationInfo.WindowSize.X, m_ApplicationInfo.WindowSize.Y);
 		glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+		glfwSetWindowUserPointer(m_Window, this);
 
 		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow*, int width, int height)
 		{
 			glViewport(0, 0, width, height);
+		});
+
+		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
+		{
+			MochiApplication* app = (MochiApplication*)glfwGetWindowUserPointer(window);
+			app->Close();
 		});
 
 		return true;
