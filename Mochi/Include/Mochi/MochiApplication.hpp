@@ -9,6 +9,10 @@ namespace Mochi
 	{
 		const char* ApplicationName = "Mochi Application";
 		Vector2<int> WindowSize = { 1280, 720 };
+		bool EnableDocking = true;
+		bool EnableViewports = true;
+		const char* FontFilename = nullptr;
+		float FontSize = 12.0f;
 	};
 
 	class MochiApplication
@@ -31,10 +35,13 @@ namespace Mochi
 		virtual bool CanCloseNow();
 	private:
 		MochiApplicationInfo m_ApplicationInfo;
-		GLFWwindow* m_Window;
+		GLFWwindow* m_Window = nullptr;
 		bool m_Running = false;
 
 		bool InitGlfw();
 		void ShutdownGlfw();
+
+		void InitDearImGui();
+		void ShutdownDearImGui();
 	};
 }
