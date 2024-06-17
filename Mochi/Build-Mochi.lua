@@ -16,7 +16,15 @@ project "Mochi"
     }
 
     includedirs {
-       "Include/Mochi"
+       "Include/Mochi",
+       "../ThirdParty/imgui",
+       "../ThirdParty/glfw/include"
+    }
+
+    links {
+        "ImGui",
+        "GLFW",
+        "Opengl32"
     }
 
     filter "system:windows"

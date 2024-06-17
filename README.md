@@ -1,1 +1,1 @@
-# CppProjectTemplate
+# Mochi
