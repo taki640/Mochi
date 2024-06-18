@@ -77,12 +77,16 @@ namespace Mochi
 		glfwSwapInterval(1);
 
 		glViewport(0, 0, m_ApplicationInfo.WindowSize.X, m_ApplicationInfo.WindowSize.Y);
+		m_WindowSize = m_ApplicationInfo.WindowSize;
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glfwSetWindowUserPointer(m_Window, this);
 
-		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow*, int width, int height)
+		glfwSetFramebufferSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
 			glViewport(0, 0, width, height);
+			MochiApplication* app = (MochiApplication*)glfwGetWindowUserPointer(window);
+			app->m_WindowSize.X = width;
+			app->m_WindowSize.Y = height;
 		});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)

@@ -27,6 +27,7 @@ namespace Mochi
 		const MochiApplicationInfo& GetApplicationInfo() const { return m_ApplicationInfo; }
 		GLFWwindow* GetWindow() { return m_Window; }
 		const GLFWwindow* GetWindow() const { return m_Window; }
+		const Vector2<int>& GetWindowSize() const { return m_WindowSize; }
 	protected:
 		virtual void OnImGuiRender() = 0;
 
@@ -36,6 +37,7 @@ namespace Mochi
 	private:
 		MochiApplicationInfo m_ApplicationInfo;
 		GLFWwindow* m_Window = nullptr;
+		Vector2<int> m_WindowSize;
 		bool m_Running = false;
 
 		bool InitGlfw();
