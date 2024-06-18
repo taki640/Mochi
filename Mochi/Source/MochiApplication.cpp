@@ -9,10 +9,14 @@ namespace Mochi
 	bool MochiApplication::Init(const MochiApplicationInfo& info)
 	{
 		m_ApplicationInfo = info;
+		OnBeforeApplicationInit();
+
 		m_Running = true;
 		if (!InitGlfw())
 			return false;
 		InitDearImGui();
+
+		OnApplicationInit();
 		return true;
 	}
 
@@ -27,7 +31,7 @@ namespace Mochi
 			ImGui_ImplGlfw_NewFrame();
 			ImGui::NewFrame();
 
-			OnImGuiRender();
+			OnApplicationRender();
 
 			ImGui::Render();
 			ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -45,6 +49,7 @@ namespace Mochi
 
 	void MochiApplication::Shutdown()
 	{
+		OnApplicationShutdown();
 		ShutdownDearImGui();
 		ShutdownGlfw();
 	}
@@ -113,6 +118,7 @@ namespace Mochi
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 		io.ConfigFlags |= m_ApplicationInfo.EnableDocking   ? ImGuiConfigFlags_DockingEnable   : ImGuiConfigFlags_None;
 		io.ConfigFlags |= m_ApplicationInfo.EnableViewports ? ImGuiConfigFlags_ViewportsEnable : ImGuiConfigFlags_None;
+		io.IniFilename = m_ApplicationInfo.ImGuiConfigurationFilename;
 
 		if (m_ApplicationInfo.FontFilename != nullptr)
 			io.Fonts->AddFontFromFileTTF(m_ApplicationInfo.FontFilename, m_ApplicationInfo.FontSize);

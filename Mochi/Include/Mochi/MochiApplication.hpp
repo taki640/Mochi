@@ -11,6 +11,7 @@ namespace Mochi
 		Vector2<int> WindowSize = { 1280, 720 };
 		bool EnableDocking = true;
 		bool EnableViewports = true;
+		const char* ImGuiConfigurationFilename = "imgui.ini";
 		const char* FontFilename = nullptr;
 		float FontSize = 12.0f;
 	};
@@ -29,7 +30,10 @@ namespace Mochi
 		const GLFWwindow* GetWindow() const { return m_Window; }
 		const Vector2<int>& GetWindowSize() const { return m_WindowSize; }
 	protected:
-		virtual void OnImGuiRender() = 0;
+		virtual void OnBeforeApplicationInit() {}
+		virtual void OnApplicationInit() {}
+		virtual void OnApplicationRender() {}
+		virtual void OnApplicationShutdown() {}
 
 		// Override this function to prevent the application from closing.
 		// This would be better to be an event, but we don't have an event system yet :P
