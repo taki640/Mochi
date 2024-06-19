@@ -1,9 +1,6 @@
 #pragma once
 
-#include <cstdint>
-#include <cassert>
-
-#define MOCHI_ASSERT(cond, message) assert((cond) && message)
+#include "../../Source/Base.hpp"
 
 namespace Mochi
 {
