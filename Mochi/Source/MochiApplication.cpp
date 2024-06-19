@@ -1,5 +1,7 @@
 #include "MochiApplication.hpp"
 
+#include "ModernTheme.hpp"
+
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -124,6 +126,7 @@ namespace Mochi
 			io.Fonts->AddFontFromFileTTF(m_ApplicationInfo.FontFilename, m_ApplicationInfo.FontSize);
 
 		ImGui::StyleColorsDark();
+		Internal::SetModernColors();
 
 		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
 		ImGui_ImplOpenGL3_Init("#version 460 core");
