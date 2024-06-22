@@ -6,6 +6,9 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include "../../ThirdParty/glfw/include/GLFW/glfw3native.h"
+
 namespace Mochi
 {
 	bool MochiApplication::Init(const MochiApplicationInfo& info)
@@ -137,5 +140,10 @@ namespace Mochi
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
+	}
+
+	const void* MochiApplication::GetNativeWindow() const
+	{
+		return glfwGetWin32Window(m_Window);
 	}
 }

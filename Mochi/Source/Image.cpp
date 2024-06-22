@@ -36,6 +36,11 @@ namespace Mochi
 		CreateTexture(data);
 	}
 
+	void Image::Unload()
+	{
+		DeleteTexture();
+	}
+
 	void Image::CreateTexture(void* data)
 	{
 		GLenum format = 0;

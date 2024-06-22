@@ -16,6 +16,7 @@ namespace Mochi
 
 		void Load(std::string_view path, bool flipY = false);
 		void Load(const uint8_t* buffer, int bufferSize, bool flipY = false);
+		void Unload();
 
 		inline uint32_t ID() const { return m_TextureID; }
 		inline bool IsLoaded() const { return m_TextureID != MOCHI_INVALID_TEXTURE_ID; }
