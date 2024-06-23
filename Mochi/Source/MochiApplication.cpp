@@ -142,7 +142,7 @@ namespace Mochi
 		ImGui::DestroyContext();
 	}
 
-	const void* MochiApplication::GetNativeWindow() const
+	void* MochiApplication::GetNativeWindow() const
 	{
 		return glfwGetWin32Window(m_Window);
 	}

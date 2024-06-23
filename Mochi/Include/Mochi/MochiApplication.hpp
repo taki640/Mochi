@@ -28,7 +28,7 @@ namespace Mochi
 		const MochiApplicationInfo& GetApplicationInfo() const { return m_ApplicationInfo; }
 		GLFWwindow* GetWindow() { return m_Window; }
 		const GLFWwindow* GetWindow() const { return m_Window; }
-		const void* GetNativeWindow() const;
+		void* GetNativeWindow() const;
 		const Vector2<int>& GetWindowSize() const { return m_WindowSize; }
 	protected:
 		virtual void OnBeforeApplicationInit() {}
