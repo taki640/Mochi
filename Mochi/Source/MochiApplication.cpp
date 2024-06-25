@@ -5,6 +5,7 @@
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
+#include <stb/stb_image.h>
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include "../../ThirdParty/glfw/include/GLFW/glfw3native.h"
@@ -82,6 +83,28 @@ namespace Mochi
 		m_Window = glfwCreateWindow(m_ApplicationInfo.WindowSize.X, m_ApplicationInfo.WindowSize.Y, m_ApplicationInfo.ApplicationName, nullptr, nullptr);
 		if (m_Window == nullptr)
 			return false;
+
+		int width;
+		int height;
+		uint8_t* iconData = nullptr;
+		if (m_ApplicationInfo.Icon.Data != nullptr)
+		{
+			int channels;
+			iconData = stbi_load_from_memory(m_ApplicationInfo.Icon.Data, m_ApplicationInfo.Icon.DataBufferSize, &width, &height, &channels, 0);
+		}
+		else if (m_ApplicationInfo.Icon.Path.data() != nullptr)
+		{
+			int channels;
+			iconData = stbi_load(m_ApplicationInfo.Icon.Path.data(), &width, &height, &channels, 0);
+		}
+
+		if (iconData != nullptr)
+		{
+			GLFWimage image{ width, height, iconData };
+			glfwSetWindowIcon(m_Window, 1, &image);	// copies the data pointer
+			stbi_image_free(iconData);
+		}
+
 
 		glfwMakeContextCurrent(m_Window);
 		glfwSwapInterval(1);

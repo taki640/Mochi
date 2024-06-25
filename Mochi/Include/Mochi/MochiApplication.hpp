@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ApplicationIcon.hpp"
 #include "Utils.hpp"
 #include "../../ThirdParty/glfw/include/GLFW/glfw3.h"
 
@@ -9,6 +10,7 @@ namespace Mochi
 	{
 		const char* ApplicationName = "Mochi Application";
 		Vector2<int> WindowSize = { 1280, 720 };
+		ApplicationIcon Icon;
 		bool EnableDocking = true;
 		bool EnableViewports = true;
 		const char* ImGuiConfigurationFilename = "imgui.ini";
