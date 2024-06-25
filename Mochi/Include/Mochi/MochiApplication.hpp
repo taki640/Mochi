@@ -2,7 +2,8 @@
 
 #include "ApplicationIcon.hpp"
 #include "Utils.hpp"
-#include "../../ThirdParty/glfw/include/GLFW/glfw3.h"
+
+struct GLFWwindow;
 
 namespace Mochi
 {
