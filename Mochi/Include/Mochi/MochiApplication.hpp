@@ -9,14 +9,15 @@ namespace Mochi
 {
 	struct MochiApplicationInfo
 	{
-		const char* ApplicationName = "Mochi Application";
-		Vector2<int> WindowSize = { 1280, 720 };
-		ApplicationIcon Icon;
-		bool EnableDocking = true;
-		bool EnableViewports = true;
-		const char* ImGuiConfigurationFilename = "imgui.ini";
-		const char* FontFilename = nullptr;
-		float FontSize = 12.0f;
+		const char* ApplicationName = "Mochi Application";		// The name of the application that appears on the window and taskbar.
+		Vector2<int> WindowSize = { 1280, 720 };				// The initial size of the window. If Maximized is set to true, it's the size of the window in normal state.
+		bool Maximized = false;									// Initialize the window in the maximized state.
+		ApplicationIcon Icon;									// The icon that appears on the window and taskbar.
+		bool EnableDocking = true;								// Enable ImGui docking feature.
+		bool EnableViewports = true;							// Enable ImGui viewports feature.
+		std::string ImGuiConfigurationFilename = "imgui.ini";	// Set to empty to not save a imgui configuration file.
+		const char* FontFilename = nullptr;						// Keep empty to use the imgui default font.
+		float FontSize = 12.0f;									// Useless if FontFilename is nullptr.
 	};
 
 	class MochiApplication
@@ -47,6 +48,7 @@ namespace Mochi
 		GLFWwindow* m_Window = nullptr;
 		Vector2<int> m_WindowSize;
 		bool m_Running = false;
+		char* m_ImGuiConfigurationFile = nullptr;
 
 		bool InitGlfw();
 		void ShutdownGlfw();

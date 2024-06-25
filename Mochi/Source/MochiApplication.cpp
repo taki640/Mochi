@@ -81,6 +81,9 @@ namespace Mochi
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+		if (m_ApplicationInfo.Maximized)
+			glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+
 		m_Window = glfwCreateWindow(m_ApplicationInfo.WindowSize.X, m_ApplicationInfo.WindowSize.Y, m_ApplicationInfo.ApplicationName, nullptr, nullptr);
 		if (m_Window == nullptr)
 			return false;
@@ -105,7 +108,6 @@ namespace Mochi
 			glfwSetWindowIcon(m_Window, 1, &image);	// copies the data pointer
 			stbi_image_free(iconData);
 		}
-
 
 		glfwMakeContextCurrent(m_Window);
 		glfwSwapInterval(1);
@@ -147,7 +149,17 @@ namespace Mochi
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 		io.ConfigFlags |= m_ApplicationInfo.EnableDocking   ? ImGuiConfigFlags_DockingEnable   : ImGuiConfigFlags_None;
 		io.ConfigFlags |= m_ApplicationInfo.EnableViewports ? ImGuiConfigFlags_ViewportsEnable : ImGuiConfigFlags_None;
-		io.IniFilename = m_ApplicationInfo.ImGuiConfigurationFilename;
+
+		if (!m_ApplicationInfo.ImGuiConfigurationFilename.empty())
+		{
+			// ImGui does not copy the filename so we need to copy and maintain the buffer ourselves.
+			const size_t bufferSize = m_ApplicationInfo.ImGuiConfigurationFilename.size() + 1;
+			m_ImGuiConfigurationFile = new char[bufferSize];
+			strcpy_s(m_ImGuiConfigurationFile, bufferSize, m_ApplicationInfo.ImGuiConfigurationFilename.c_str());
+		}
+
+		// We set also want to set to nullptr to not save the file
+		io.IniFilename = m_ImGuiConfigurationFile;
 
 		if (m_ApplicationInfo.FontFilename != nullptr)
 			io.Fonts->AddFontFromFileTTF(m_ApplicationInfo.FontFilename, m_ApplicationInfo.FontSize);
@@ -164,6 +176,8 @@ namespace Mochi
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
+		delete[] m_ImGuiConfigurationFile;
+		m_ImGuiConfigurationFile = nullptr;
 	}
 
 	void* MochiApplication::GetNativeWindow() const
