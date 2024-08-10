@@ -5,13 +5,19 @@
 class Application : public Mochi::MochiApplication
 {
 protected:
-	virtual void OnImGuiRender() override
+	virtual void OnApplicationRender() override
 	{
 		ImGui::ShowDemoWindow();
 	}
 };
 
+#ifndef MOCHI_FINAL
 int main()
+#else
+#include <Windows.h>
+
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, int nCmdShow)
+#endif
 {
 	Mochi::MochiApplicationInfo info;
 	info.FontFilename = "..\\ThirdParty\\imgui\\misc\\fonts\\Roboto-Medium.ttf";
