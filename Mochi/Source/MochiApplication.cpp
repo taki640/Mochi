@@ -161,8 +161,8 @@ namespace Mochi
 		// We set also want to set to nullptr to not save the file
 		io.IniFilename = m_ImGuiConfigurationFile;
 
-		if (m_ApplicationInfo.FontFilename != nullptr)
-			io.Fonts->AddFontFromFileTTF(m_ApplicationInfo.FontFilename, m_ApplicationInfo.FontSize);
+		if (m_ApplicationInfo.Font != nullptr)
+			m_ApplicationInfo.Font->Load();
 
 		ImGui::StyleColorsDark();
 		Internal::SetModernColors();

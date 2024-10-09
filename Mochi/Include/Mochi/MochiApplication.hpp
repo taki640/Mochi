@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ApplicationIcon.hpp"
+#include "Font.hpp"
 #include "Utils.hpp"
 
 struct GLFWwindow;
@@ -16,8 +17,7 @@ namespace Mochi
 		bool EnableDocking = true;								// Enable ImGui docking feature.
 		bool EnableViewports = true;							// Enable ImGui viewports feature.
 		std::string ImGuiConfigurationFilename = "imgui.ini";	// Set to empty to not save a imgui configuration file.
-		const char* FontFilename = nullptr;						// Keep empty to use the imgui default font.
-		float FontSize = 12.0f;									// Useless if FontFilename is nullptr.
+		BaseFont* Font = nullptr;								// A MemoryFont or FileFont (see Font.hpp), if nullptr the default imgui font is loaded
 	};
 
 	class MochiApplication
