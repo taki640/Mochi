@@ -1,5 +1,8 @@
 #include "Mochi/MochiApplication.hpp"
 
+#define MOCHI_EMBED_ROBOTO_MEDIUM
+#include "Mochi/Fonts/Roboto.hpp"
+
 #include <imgui.h>
 
 class Application : public Mochi::MochiApplication
@@ -19,7 +22,7 @@ int main()
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, int nCmdShow)
 #endif
 {
-	Mochi::FileFont font("..\\ThirdParty\\imgui\\misc\\fonts\\Roboto-Medium.ttf", 14.0f);
+	Mochi::MemoryFont font(Mochi::Embed::FONT_ROBOTO_MEDIUM, Mochi::Embed::FONT_ROBOTO_MEDIUM_SIZE, 14.0f, true, false);
 	Mochi::MochiApplicationInfo info;
 	info.Font = &font;
 
