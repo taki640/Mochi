@@ -102,6 +102,13 @@ namespace Mochi
 			--*this;
 			return *this;
 		}
+
+		// Can be used to convert to other Vector2 types. e.g. ImVec2
+		template<typename T, typename Cast = Type>
+		inline T ConvertTo() const
+		{
+			return { (Cast)X, (Cast)Y };
+		}
 	};
 
 	template<typename Type>

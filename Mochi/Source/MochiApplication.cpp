@@ -125,12 +125,20 @@ namespace Mochi
 			app->m_WindowSize.Y = height;
 		});
 
+		glfwSetWindowPosCallback(m_Window, [](GLFWwindow* window, int x, int y)
+		{
+			MochiApplication* app = (MochiApplication*)glfwGetWindowUserPointer(window);
+			app->m_WindowPosition.X = x;
+			app->m_WindowPosition.Y = y;
+		});
+
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
 		{
 			MochiApplication* app = (MochiApplication*)glfwGetWindowUserPointer(window);
 			app->Close();
 		});
 
+		glfwGetWindowPos(m_Window, &m_WindowPosition.X, &m_WindowPosition.Y);
 		return true;
 	}
 

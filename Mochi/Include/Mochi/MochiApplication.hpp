@@ -34,6 +34,7 @@ namespace Mochi
 		const GLFWwindow* GetWindow() const { return m_Window; }
 		void* GetNativeWindow() const;
 		const Vector2<int>& GetWindowSize() const { return m_WindowSize; }
+		const Vector2<int>& GetWindowPosition() const { return m_WindowPosition; }
 	protected:
 		virtual void OnBeforeApplicationInit() {}
 		virtual void OnApplicationInit() {}
@@ -47,6 +48,7 @@ namespace Mochi
 		MochiApplicationInfo m_ApplicationInfo;
 		GLFWwindow* m_Window = nullptr;
 		Vector2<int> m_WindowSize;
+		Vector2<int> m_WindowPosition;
 		bool m_Running = false;
 		char* m_ImGuiConfigurationFile = nullptr;
 
