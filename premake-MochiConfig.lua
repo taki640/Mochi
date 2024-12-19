@@ -19,6 +19,16 @@ function MochiApplicationWorkspace(mochiPath, wksName, startProjectName, clientP
             "Release",
             "Final"
         }
+    
+        filter "system:windows"
+            defines "MOCHI_WINDOWS"
+
+        filter (MOCHI_DEBUG_FILTER)
+            defines "MOCHI_DEBUG"
+        filter (MOCHI_RELEASE_FILTER)
+            defines "MOCHI_RELEASE"
+        filter (MOCHI_FINAL_FILTER)
+            defines "MOCHI_FINAL"
 
     group "ThirdParty"
         include (mochiPath .. "/ThirdParty/imgui/Build-imgui.lua")

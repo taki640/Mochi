@@ -25,22 +25,18 @@ project "MochiSandbox"
 
     filter "system:windows"
         systemversion "latest"
-        defines { "MOCHI_WINDOWS" }
 
     filter "configurations:Debug"
-        defines { "MOCHI_DEBUG" }
         runtime "Debug"
         symbols "On"
 
     filter "configurations:Release"
-        defines { "MOCHI_RELEASE" }
         runtime "Release"
         optimize "On"
         symbols "On"
 
     filter "configurations:Final"
         kind "WindowedApp"
-        defines { "MOCHI_FINAL" }
         runtime "Release"
         optimize "On"
         symbols "Off"
