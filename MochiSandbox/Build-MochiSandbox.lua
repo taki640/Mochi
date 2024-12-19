@@ -3,8 +3,8 @@ project "MochiSandbox"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++20"
-    targetdir ("%{wks.location}/Bin/" .. OutputDir .. "/%{prj.name}")
-    objdir ("%{wks.location}/Bin/Int/" .. OutputDir .. "/%{prj.name}")
+    targetdir (MOCHI_TARGET_DIR_FORMAT)
+    objdir (MOCHI_OBJ_DIR_FORMAT)
 
     files {
         "Build-MochiSandbox.lua",

@@ -3,4 +3,4 @@
 	url = https://github.com/taki640/imgui.git
 [submodule "ThirdParty/glfw"]
 	path = ThirdParty/glfw
-	url = https://github.com/LittleMate/glfw.git
+	url = https://github.com/MadeByTaki/glfw.git

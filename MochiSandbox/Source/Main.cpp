@@ -19,9 +19,10 @@ int main()
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine, int nCmdShow)
 #endif
 {
+	Mochi::FileFont font("..\\ThirdParty\\imgui\\misc\\fonts\\Roboto-Medium.ttf", 14.0f);
 	Mochi::MochiApplicationInfo info;
-	info.FontFilename = "..\\ThirdParty\\imgui\\misc\\fonts\\Roboto-Medium.ttf";
-	info.FontSize = 14.0f;
+	info.Font = &font;
+
 	Application app;
 	app.Init(info);
 	app.Run();
