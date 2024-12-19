@@ -9,6 +9,9 @@ DEBUG_FILTER    = MOCHI_DEBUG_FILTER
 RELEASE_FILTER  = MOCHI_RELEASE_FILTER
 FINAL_FILTER    = MOCHI_FINAL_FILTER
 
+IMGUI_USE_USER_H = true
+IMGUI_USE_IMGUI_USER_STD_STRING = true
+
 function MochiApplicationWorkspace(mochiPath, wksName, startProjectName, clientPremakeProjects)
     workspace (wksName)
         architecture "x64"
@@ -26,9 +29,9 @@ function MochiApplicationWorkspace(mochiPath, wksName, startProjectName, clientP
         filter (MOCHI_DEBUG_FILTER)
             defines "MOCHI_DEBUG"
         filter (MOCHI_RELEASE_FILTER)
-            defines "MOCHI_RELEASE"
+            defines { "MOCHI_RELEASE", "NDEBUG" }
         filter (MOCHI_FINAL_FILTER)
-            defines "MOCHI_FINAL"
+            defines { "MOCHI_FINAL", "NDEBUG" }
 
     group "ThirdParty"
         include (mochiPath .. "/ThirdParty/imgui/Build-imgui.lua")
