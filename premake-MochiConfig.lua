@@ -45,6 +45,17 @@ function MochiApplicationWorkspace(mochiPath, wksName, startProjectName, clientP
     end
 
     for _, v in ipairs(clientPremakeProjects) do
-        include (v)
+        nameAndGroup = {}
+        if type(v) ~= "table" then
+            nameAndGroup[1] = v
+            nameAndGroup[2] = ""
+        else
+            nameAndGroup[1] = v[1]
+            nameAndGroup[2] = v[2]
+        end
+
+        group (nameAndGroup[2])
+            include (nameAndGroup[1])
+        group ""
     end
 end
