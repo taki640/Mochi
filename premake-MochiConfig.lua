@@ -22,7 +22,12 @@ function MochiApplicationWorkspace(mochiPath, wksName, startProjectName, clientP
             "Release",
             "Final"
         }
-    
+
+        defines {
+            "IMGUI_INCLUDE_IMGUI_USER_H",
+            "IMGUI_USER_STDSTRING"
+        }
+
         filter "system:windows"
             defines "MOCHI_WINDOWS"
 
