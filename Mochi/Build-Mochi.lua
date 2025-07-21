@@ -17,8 +17,8 @@ project "Mochi"
 
     includedirs {
        "Include/Mochi",
-       "../ThirdParty/imgui",
-       "../ThirdParty/glfw/include",
+       "../ThirdParty/imgui/imgui",
+       "../ThirdParty/glfw/glfw/include",
        "../ThirdParty/stb"
     }
 

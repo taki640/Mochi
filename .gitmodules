@@ -1,6 +1,6 @@
-[submodule "ThirdParty/imgui"]
-	path = ThirdParty/imgui
-	url = https://github.com/taki640/imgui.git
-[submodule "ThirdParty/glfw"]
-	path = ThirdParty/glfw
-	url = https://github.com/MadeByTaki/glfw.git
+[submodule "ThirdParty/imgui/imgui"]
+	path = ThirdParty/imgui/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "ThirdParty/glfw/glfw"]
+	path = ThirdParty/glfw/glfw
+	url = https://github.com/glfw/glfw.git

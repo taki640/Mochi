@@ -16,7 +16,7 @@ project "MochiSandbox"
     includedirs {
         "Source",
         "%{wks.location}/Mochi/Include",
-        "%{wks.location}/ThirdParty/imgui"
+        "%{wks.location}/ThirdParty/imgui/imgui"
     }
 
     links {
