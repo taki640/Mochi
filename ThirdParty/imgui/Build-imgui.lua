@@ -39,14 +39,14 @@ project "ImGui"
         pic "On"
         systemversion "latest"
 
-    filter (DEBUG_FILTER)
+    filter (MOCHI_DEBUG_FILTER)
         runtime "Debug"
         symbols "On"
-    filter (RELEASE_FILTER)
+    filter (MOCHI_RELEASE_FILTER)
         runtime "Release"
         symbols "On"
         optimize "On"
-    filter (FINAL_FILTER)
+    filter (MOCHI_FINAL_FILTER)
         runtime "Release"
         symbols "Off"
         optimize "On"

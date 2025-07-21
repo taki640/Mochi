@@ -4,14 +4,6 @@ MOCHI_DEBUG_FILTER        = "configurations:Debug"
 MOCHI_RELEASE_FILTER      = "configurations:Release"
 MOCHI_FINAL_FILTER        = "configurations:Final"
 
--- Filters for third-party libraries
-DEBUG_FILTER    = MOCHI_DEBUG_FILTER
-RELEASE_FILTER  = MOCHI_RELEASE_FILTER
-FINAL_FILTER    = MOCHI_FINAL_FILTER
-
-IMGUI_USE_USER_H = true
-IMGUI_USE_IMGUI_USER_STD_STRING = true
-
 function MochiApplicationWorkspace(mochiPath, wksName, startProjectName, clientPremakeProjects)
     workspace (wksName)
         architecture "x64"

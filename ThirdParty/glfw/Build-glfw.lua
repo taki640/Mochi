@@ -95,14 +95,14 @@ project "GLFW"
 		sanitize { "Address" }
 		flags { "NoRuntimeChecks", "NoIncrementalLink" }
 
-	filter (DEBUG_FILTER)
+	filter (MOCHI_DEBUG_FILTER)
 		runtime "Debug"
 		symbols "on"
-	filter (RELEASE_FILTER)
+	filter (MOCHI_RELEASE_FILTER)
         runtime "Release"
         symbols "On"
         optimize "Speed"
-    filter (FINAL_FILTER)
+    filter (MOCHI_FINAL_FILTER)
         runtime "Release"
         symbols "Off"
         optimize "Speed"
