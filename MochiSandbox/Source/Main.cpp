@@ -23,8 +23,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 #endif
 {
 	Mochi::MemoryFont font(Mochi::Embed::FONT_ROBOTO_MEDIUM, Mochi::Embed::FONT_ROBOTO_MEDIUM_SIZE, 14.0f, true, false);
-	Mochi::MochiApplicationInfo info;
+	Mochi::MochiApplicationInitInfo info;
 	info.Font = &font;
+	info.WindowPositionCenter = true;
 
 	Application app;
 	app.Init(info);

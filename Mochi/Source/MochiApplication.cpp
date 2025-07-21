@@ -13,15 +13,14 @@
 
 namespace Mochi
 {
-	bool MochiApplication::Init(const MochiApplicationInfo& info)
+	bool MochiApplication::Init(const MochiApplicationInitInfo& initInfo)
 	{
-		m_ApplicationInfo = info;
 		OnBeforeApplicationInit();
 
 		m_Running = true;
-		if (!InitGlfw())
+		if (!InitGlfw(initInfo))
 			return false;
-		InitDearImGui();
+		InitDearImGui(initInfo);
 
 		OnApplicationInit();
 		return true;
@@ -72,7 +71,7 @@ namespace Mochi
 		return true;
 	}
 
-	bool MochiApplication::InitGlfw()
+	bool MochiApplication::InitGlfw(const MochiApplicationInitInfo& initInfo)
 	{
 		if (!glfwInit())
 			return false;
@@ -81,25 +80,40 @@ namespace Mochi
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		if (m_ApplicationInfo.Maximized)
+		if (initInfo.Maximized)
 			glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
 
-		m_Window = glfwCreateWindow(m_ApplicationInfo.WindowSize.X, m_ApplicationInfo.WindowSize.Y, m_ApplicationInfo.ApplicationName, nullptr, nullptr);
+		Vector2<int> initialPosition = initInfo.WindowPosition;
+		if (initInfo.WindowPositionCenter)
+		{
+			Vector2<int> screenSize;
+			glfwGetMonitorWorkarea(glfwGetPrimaryMonitor(), nullptr, nullptr, &screenSize.X, &screenSize.Y);
+			for (int i = 0; i < 2; i++)
+				initialPosition[i] = (int)((screenSize[i] - initInfo.WindowSize[i]) * 0.5f);
+		}
+
+		if (initialPosition.X > -1 && initialPosition.Y > -1)
+		{
+			glfwWindowHint(GLFW_POSITION_X, initialPosition.X);
+			glfwWindowHint(GLFW_POSITION_Y, initialPosition.Y);
+		}
+
+		m_Window = glfwCreateWindow(initInfo.WindowSize.X, initInfo.WindowSize.Y, initInfo.ApplicationName, nullptr, nullptr);
 		if (m_Window == nullptr)
 			return false;
 
 		int width;
 		int height;
 		uint8_t* iconData = nullptr;
-		if (m_ApplicationInfo.Icon.Data != nullptr)
+		if (initInfo.Icon.Data != nullptr)
 		{
 			int channels;
-			iconData = stbi_load_from_memory(m_ApplicationInfo.Icon.Data, m_ApplicationInfo.Icon.DataBufferSize, &width, &height, &channels, 0);
+			iconData = stbi_load_from_memory(initInfo.Icon.Data, initInfo.Icon.DataBufferSize, &width, &height, &channels, 0);
 		}
-		else if (m_ApplicationInfo.Icon.Path.data() != nullptr)
+		else if (initInfo.Icon.Path.data() != nullptr)
 		{
 			int channels;
-			iconData = stbi_load(m_ApplicationInfo.Icon.Path.data(), &width, &height, &channels, 0);
+			iconData = stbi_load(initInfo.Icon.Path.data(), &width, &height, &channels, 0);
 		}
 
 		if (iconData != nullptr)
@@ -112,8 +126,8 @@ namespace Mochi
 		glfwMakeContextCurrent(m_Window);
 		glfwSwapInterval(1);
 
-		glViewport(0, 0, m_ApplicationInfo.WindowSize.X, m_ApplicationInfo.WindowSize.Y);
-		m_WindowSize = m_ApplicationInfo.WindowSize;
+		glViewport(0, 0, initInfo.WindowSize.X, initInfo.WindowSize.Y);
+		m_WindowSize = initInfo.WindowSize;
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glfwSetWindowUserPointer(m_Window, this);
 
@@ -148,29 +162,29 @@ namespace Mochi
 		glfwTerminate();
 	}
 
-	void MochiApplication::InitDearImGui()
+	void MochiApplication::InitDearImGui(const MochiApplicationInitInfo& initInfo)
 	{
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-		io.ConfigFlags |= m_ApplicationInfo.EnableDocking   ? ImGuiConfigFlags_DockingEnable   : ImGuiConfigFlags_None;
-		io.ConfigFlags |= m_ApplicationInfo.EnableViewports ? ImGuiConfigFlags_ViewportsEnable : ImGuiConfigFlags_None;
+		io.ConfigFlags |= initInfo.EnableDocking   ? ImGuiConfigFlags_DockingEnable   : ImGuiConfigFlags_None;
+		io.ConfigFlags |= initInfo.EnableViewports ? ImGuiConfigFlags_ViewportsEnable : ImGuiConfigFlags_None;
 
-		if (!m_ApplicationInfo.ImGuiConfigurationFilename.empty())
+		if (!initInfo.ImGuiConfigurationFilename.empty())
 		{
 			// ImGui does not copy the filename so we need to copy and maintain the buffer ourselves.
-			const size_t bufferSize = m_ApplicationInfo.ImGuiConfigurationFilename.size() + 1;
+			const size_t bufferSize = initInfo.ImGuiConfigurationFilename.size() + 1;
 			m_ImGuiConfigurationFile = new char[bufferSize];
-			strcpy_s(m_ImGuiConfigurationFile, bufferSize, m_ApplicationInfo.ImGuiConfigurationFilename.c_str());
+			strcpy_s(m_ImGuiConfigurationFile, bufferSize, initInfo.ImGuiConfigurationFilename.c_str());
 		}
 
 		// We set also want to set to nullptr to not save the file
 		io.IniFilename = m_ImGuiConfigurationFile;
 
-		if (m_ApplicationInfo.Font != nullptr)
-			m_ApplicationInfo.Font->Load();
+		if (initInfo.Font != nullptr)
+			initInfo.Font->Load();
 
 		ImGui::StyleColorsDark();
 		Internal::SetModernColors();

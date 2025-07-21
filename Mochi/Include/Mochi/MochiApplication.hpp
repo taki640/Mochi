@@ -8,9 +8,11 @@ struct GLFWwindow;
 
 namespace Mochi
 {
-	struct MochiApplicationInfo
+	struct MochiApplicationInitInfo
 	{
 		const char* ApplicationName = "Mochi Application";		// The name of the application that appears on the window and taskbar.
+		Vector2<int> WindowPosition = { -1, -1 };				// The initial position of the window. If X or Y is -1, the default position is used.
+		bool WindowPositionCenter = false;                      // Create the window in the center of the primary screen. If true, WindowPosition is ignored.
 		Vector2<int> WindowSize = { 1280, 720 };				// The initial size of the window. If Maximized is set to true, it's the size of the window in normal state.
 		bool Maximized = false;									// Initialize the window in the maximized state.
 		ApplicationIcon Icon;									// The icon that appears on the window and taskbar.
@@ -23,13 +25,12 @@ namespace Mochi
 	class MochiApplication
 	{
 	public:
-		bool Init(const MochiApplicationInfo& info);
+		bool Init(const MochiApplicationInitInfo& initInfo);
 		void Run();
 		void Shutdown();
 
 		void Close();
 
-		const MochiApplicationInfo& GetApplicationInfo() const { return m_ApplicationInfo; }
 		GLFWwindow* GetWindow() { return m_Window; }
 		const GLFWwindow* GetWindow() const { return m_Window; }
 		void* GetNativeWindow() const;
@@ -45,17 +46,16 @@ namespace Mochi
 		// This would be better to be an event, but we don't have an event system yet :P
 		virtual bool CanCloseNow();
 	private:
-		MochiApplicationInfo m_ApplicationInfo;
 		GLFWwindow* m_Window = nullptr;
 		Vector2<int> m_WindowSize;
 		Vector2<int> m_WindowPosition;
 		bool m_Running = false;
 		char* m_ImGuiConfigurationFile = nullptr;
 
-		bool InitGlfw();
+		bool InitGlfw(const MochiApplicationInitInfo& initInfo);
 		void ShutdownGlfw();
 
-		void InitDearImGui();
+		void InitDearImGui(const MochiApplicationInitInfo& initInfo);
 		void ShutdownDearImGui();
 	};
 }
