@@ -20,11 +20,15 @@ namespace Mochi
 
 		inline uint32_t ID() const { return m_TextureID; }
 		inline bool IsLoaded() const { return m_TextureID != MOCHI_INVALID_TEXTURE_ID; }
+
+		inline int Width() const { return m_Width; }
+		inline int Height() const { return m_Height; }
+		inline int ChannelCount() const { return m_ChannelCount; }
 	private:
 		uint32_t m_TextureID = MOCHI_INVALID_TEXTURE_ID;
 		int m_Width = 0;
 		int m_Height = 0;
-		int m_Channels = 0;
+		int m_ChannelCount = 0;
 
 		void CreateTexture(void* data);
 		void DeleteTexture();

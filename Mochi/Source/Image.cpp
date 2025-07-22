@@ -25,14 +25,14 @@ namespace Mochi
 	void Image::Load(std::string_view path, bool flipY)
 	{
 		stbi_set_flip_vertically_on_load(flipY);
-		stbi_uc* data = stbi_load(path.data(), &m_Width, &m_Height, &m_Channels, 0);
+		stbi_uc* data = stbi_load(path.data(), &m_Width, &m_Height, &m_ChannelCount, 0);
 		CreateTexture(data);
 	}
 
 	void Image::Load(const uint8_t* buffer, int bufferSize, bool flipY)
 	{
 		stbi_set_flip_vertically_on_load(flipY);
-		stbi_uc* data = stbi_load_from_memory(buffer, bufferSize, &m_Width, &m_Height, &m_Channels, 0);
+		stbi_uc* data = stbi_load_from_memory(buffer, bufferSize, &m_Width, &m_Height, &m_ChannelCount, 0);
 		CreateTexture(data);
 	}
 
@@ -44,11 +44,11 @@ namespace Mochi
 	void Image::CreateTexture(void* data)
 	{
 		GLenum format = 0;
-		if (m_Channels == 4)
+		if (m_ChannelCount == 4)
 			format = GL_RGBA;
-		else if (m_Channels == 3)
+		else if (m_ChannelCount == 3)
 			format = GL_RGB;
-		else if (m_Channels == 1)
+		else if (m_ChannelCount == 1)
 			format = GL_RED;
 
 		glGenTextures(1, &m_TextureID);
