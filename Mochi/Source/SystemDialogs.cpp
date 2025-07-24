@@ -4,7 +4,11 @@
 
 #ifdef MOCHI_WINDOWS
 #include <Windows.h>
+
+// Use Windows 8+ message box style
+#pragma comment(linker, "/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #endif
+
 
 namespace Mochi
 {
@@ -92,5 +96,36 @@ namespace Mochi
 		}
 
 		return false;
+	}
+
+	// Imagine how amazing the world would be if Microsoft programmers prefixed their macros with WIN_ 
+#undef ERROR
+
+	static uint32_t GetMessageBoxType(MessageBoxType type)
+	{
+	#ifdef MOCHI_WINDOWS
+		switch (type)
+		{
+			case MessageBoxType::INFO:		return MB_ICONINFORMATION;
+			case MessageBoxType::WARNING:	return MB_ICONWARNING;
+			case MessageBoxType::ERROR:		return MB_ICONERROR;
+		}
+	#endif
+
+		return 0;
+	}
+
+	void ShowMessageBox(const std::string& message, const std::string& caption, MessageBoxType type)
+	{
+	#ifdef MOCHI_WINDOWS
+		MessageBoxA(nullptr, message.data(), caption.data(), GetMessageBoxType(type));
+	#endif
+	}
+
+	void ShowMessageBox(const std::wstring& message, const std::wstring& caption, MessageBoxType type)
+	{
+	#ifdef MOCHI_WINDOWS
+		MessageBoxW(nullptr, message.data(), caption.data(), GetMessageBoxType(type));
+	#endif
 	}
 }
