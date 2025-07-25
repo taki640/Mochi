@@ -2,6 +2,7 @@
 
 #include "../../Source/Base.hpp"
 
+#include <vector>
 #include <span>
 
 namespace Mochi
@@ -14,6 +15,9 @@ namespace Mochi
 
 	bool OpenFileDialog(std::wstring& outPath, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePath = false);
 	bool OpenFileDialogUTF8(std::string& outPath, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePath = false);
+
+	bool OpenFileDialog(std::vector<std::wstring>& outPaths, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePaths = false);
+	bool OpenFileDialogUTF8(std::vector<std::string>& outPaths, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePaths = false);
 
 	enum class MessageBoxType
 	{

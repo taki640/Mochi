@@ -107,6 +107,82 @@ namespace Mochi
 		return false;
 	}
 
+	bool OpenFileDialog(std::vector<std::wstring>& outPaths, std::span<const FileDialogFilter> filters, int filterIndex, bool normalizePaths)
+	{
+	#ifdef MOCHI_WINDOWS
+		std::vector<WCHAR> buffer(65536, 0);
+
+		OPENFILENAMEW openFileName;
+		ZeroMemory(&openFileName, sizeof(OPENFILENAMEW));
+		openFileName.lStructSize = sizeof(OPENFILENAMEW);
+		openFileName.hwndOwner = g_WindowHWND;
+		openFileName.lpstrFile = buffer.data();
+		openFileName.nMaxFile = (DWORD)buffer.size();
+
+		std::wstring filter = BuildFileDialogWindowsFilter(filters);
+		openFileName.lpstrFilter = filter.empty() ? nullptr : filter.c_str();
+		openFileName.nFilterIndex = filterIndex + 1;
+
+		openFileName.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_ALLOWMULTISELECT | OFN_EXPLORER;
+
+		if (GetOpenFileNameW(&openFileName) == TRUE)
+		{
+			const WCHAR* ptr = buffer.data();
+			std::wstring directory = ptr;
+			ptr += directory.size() + 1;
+
+			wchar_t dirSeparator;
+			if (normalizePaths)
+			{
+				std::replace(directory.begin(), directory.end(), '\\', '/');
+				dirSeparator = L'/';
+			}
+			else
+			{
+				dirSeparator = L'\\';
+			}
+
+			if (*ptr == 0)
+			{
+				outPaths.push_back(std::move(directory));
+			}
+			else
+			{
+				while (*ptr)
+				{
+					outPaths.emplace_back(directory + dirSeparator + ptr);
+					ptr += wcslen(ptr) + 1;
+				}
+			}
+
+			return true;
+		}
+	#endif
+
+		return false;
+	}
+
+	bool OpenFileDialogUTF8(std::vector<std::string>& outPaths, std::span<const FileDialogFilter> filters, int filterIndex, bool normalizePaths)
+	{
+		std::vector<std::wstring> widePaths;
+		if (OpenFileDialog(widePaths, filters, filterIndex, normalizePaths))
+		{
+		#ifdef MOCHI_WINDOWS
+			for (const std::wstring& widePath : widePaths)
+			{
+				std::string& outPath = outPaths.emplace_back();
+				int size = WideCharToMultiByte(CP_UTF8, 0, widePath.data(), (int)widePath.size(), nullptr, 0, nullptr, nullptr);
+				outPath.resize(size);
+				WideCharToMultiByte(CP_UTF8, 0, widePath.data(), (int)widePath.size(), outPath.data(), size, nullptr, nullptr);
+			}
+
+			return true;
+		#endif
+		}
+
+		return false;
+	}
+
 	// Imagine how amazing the world would be if Microsoft programmers prefixed their macros with WIN_ 
 #undef ERROR
 
