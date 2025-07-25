@@ -25,11 +25,9 @@ namespace Mochi
 	class MochiApplication
 	{
 	public:
-		bool Init(const MochiApplicationInitInfo& initInfo);
-		void Run();
-		void Shutdown();
-
-		void Close();
+		// Returns the exit code
+		int Run(const MochiApplicationInitInfo& initInfo);
+		void Close(int exitCode = 0);
 
 		GLFWwindow* GetWindow() { return m_Window; }
 		const GLFWwindow* GetWindow() const { return m_Window; }
@@ -37,19 +35,21 @@ namespace Mochi
 		const Vector2<int>& GetWindowSize() const { return m_WindowSize; }
 		const Vector2<int>& GetWindowPosition() const { return m_WindowPosition; }
 	protected:
-		virtual void OnBeforeApplicationInit() {}
-		virtual void OnApplicationInit() {}
+		virtual bool OnBeforeApplicationInit() { return true; }
+		virtual bool OnApplicationInit() { return false; }
 		virtual void OnApplicationRender() {}
 		virtual void OnApplicationShutdown() {}
 
 		// Override this function to prevent the application from closing.
 		// This would be better to be an event, but we don't have an event system yet :P
+		// NOTE: This is only called if the exit code passed on Close() is 0
 		virtual bool CanCloseNow();
 	private:
 		GLFWwindow* m_Window = nullptr;
 		Vector2<int> m_WindowSize;
 		Vector2<int> m_WindowPosition;
 		bool m_Running = false;
+		int m_ExitCode = 0;
 		char* m_ImGuiConfigurationFile = nullptr;
 
 		bool InitGlfw(const MochiApplicationInitInfo& initInfo);

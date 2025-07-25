@@ -13,21 +13,18 @@
 
 namespace Mochi
 {
-	bool MochiApplication::Init(const MochiApplicationInitInfo& initInfo)
+	int MochiApplication::Run(const MochiApplicationInitInfo& initInfo)
 	{
-		OnBeforeApplicationInit();
-
 		m_Running = true;
+
+		if (!OnBeforeApplicationInit())
+			return 1;
 		if (!InitGlfw(initInfo))
-			return false;
+			return 1;
 		InitDearImGui(initInfo);
+		if (!OnApplicationInit())
+			return 1;
 
-		OnApplicationInit();
-		return true;
-	}
-
-	void MochiApplication::Run()
-	{
 		while (m_Running)
 		{
 			glfwPollEvents();
@@ -51,19 +48,36 @@ namespace Mochi
 
 			glfwSwapBuffers(m_Window);
 		}
-	}
 
-	void MochiApplication::Shutdown()
-	{
-		OnApplicationShutdown();
+		// If we're not exiting with a success error code, assume the client application doesn't want to properly shutdown.
+		// Imagine the situation: An application always saves a configuration file on shutdown, the loading of this same file
+		// causes an error and the application wants to exit. If shutdown is called and the file was half-loaded it will completely
+		// overwrite the broken file with a different broken file. Now the programmer and maybe the user have no idea of what's
+		// happening.
+		// But still, I not a huge fan of this. Maybe, it could be nice to have a force shutdown callback option?
+		if (m_ExitCode == 0)
+			OnApplicationShutdown();
+
 		ShutdownDearImGui();
 		ShutdownGlfw();
+		return m_ExitCode;
 	}
 
-	void MochiApplication::Close()
+	void MochiApplication::Close(int exitCode)
 	{
-		if (CanCloseNow())
+		if (exitCode == 0)
+		{
+			if (CanCloseNow())
+			{
+				m_Running = false;
+				m_ExitCode = 0;
+			}
+		}
+		else
+		{
 			m_Running = false;
+			m_ExitCode = exitCode;
+		}
 	}
 
 	bool MochiApplication::CanCloseNow()
