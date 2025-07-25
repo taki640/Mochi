@@ -12,8 +12,8 @@ namespace Mochi
 		std::span<const wchar_t*> Extensions; // E.g. { *.png, *.jpg, *.jpeg, *.gif }
 	};
 
-	bool OpenFileDialog(std::wstring& outPath, void* nativeWindow, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePath = false);
-	bool OpenFileDialogUTF8(std::string& outPath, void* nativeWindow, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePath = false);
+	bool OpenFileDialog(std::wstring& outPath, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePath = false);
+	bool OpenFileDialogUTF8(std::string& outPath, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePath = false);
 
 	enum class MessageBoxType
 	{

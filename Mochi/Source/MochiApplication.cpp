@@ -13,6 +13,10 @@
 
 namespace Mochi
 {
+#ifdef MOCHI_WINDOWS
+	extern void RegisterDialogsHWND(HWND hwnd);
+#endif
+
 	int MochiApplication::Run(const MochiApplicationInitInfo& initInfo)
 	{
 		m_Running = true;
@@ -167,6 +171,10 @@ namespace Mochi
 		});
 
 		glfwGetWindowPos(m_Window, &m_WindowPosition.X, &m_WindowPosition.Y);
+
+	#ifdef MOCHI_WINDOWS
+		RegisterDialogsHWND(glfwGetWin32Window(m_Window));
+	#endif
 		return true;
 	}
 

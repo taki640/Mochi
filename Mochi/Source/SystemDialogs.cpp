@@ -12,6 +12,15 @@
 
 namespace Mochi
 {
+#ifdef MOCHI_WINDOWS
+	static HWND g_WindowHWND;
+
+	void RegisterDialogsHWND(HWND hwnd)
+	{
+		g_WindowHWND = hwnd;
+	}
+#endif
+
 	static std::wstring BuildFileDialogWindowsFilter(std::span<const FileDialogFilter> filters)
 	{
 		std::wstring result;
@@ -54,14 +63,14 @@ namespace Mochi
 		return result;
 	}
 
-	bool OpenFileDialog(std::wstring& outPath, void* nativeWindow, std::span<const FileDialogFilter> filters, int filterIndex, bool normalizePath)
+	bool OpenFileDialog(std::wstring& outPath, std::span<const FileDialogFilter> filters, int filterIndex, bool normalizePath)
 	{
 	#ifdef MOCHI_WINDOWS
 		OPENFILENAMEW openFileName;
 		WCHAR sizeFile[MAX_PATH] = { 0 }; // TODO: Long path aware (https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation)
 		ZeroMemory(&openFileName, sizeof(OPENFILENAMEW));
 		openFileName.lStructSize = sizeof(OPENFILENAMEW);
-		openFileName.hwndOwner = (HWND)nativeWindow;
+		openFileName.hwndOwner = g_WindowHWND;
 		openFileName.lpstrFile = sizeFile;
 		openFileName.nMaxFile = sizeof(sizeFile);
 
@@ -82,10 +91,10 @@ namespace Mochi
 		return false;
 	}
 
-	bool OpenFileDialogUTF8(std::string& outPath, void* nativeWindow, std::span<const FileDialogFilter> filters, int filterIndex, bool normalizePath)
+	bool OpenFileDialogUTF8(std::string& outPath, std::span<const FileDialogFilter> filters, int filterIndex, bool normalizePath)
 	{
 		std::wstring widePath;
-		if (OpenFileDialog(widePath, nativeWindow, filters, filterIndex, normalizePath))
+		if (OpenFileDialog(widePath, filters, filterIndex, normalizePath))
 		{
 		#ifdef MOCHI_WINDOWS
 			int size = WideCharToMultiByte(CP_UTF8, 0, widePath.data(), (int)widePath.size(), nullptr, 0, nullptr, nullptr);
@@ -118,14 +127,14 @@ namespace Mochi
 	void ShowMessageBox(const std::string& message, const std::string& caption, MessageBoxType type)
 	{
 	#ifdef MOCHI_WINDOWS
-		MessageBoxA(nullptr, message.data(), caption.data(), GetMessageBoxType(type));
+		MessageBoxA(g_WindowHWND, message.data(), caption.data(), GetMessageBoxType(type));
 	#endif
 	}
 
 	void ShowMessageBox(const std::wstring& message, const std::wstring& caption, MessageBoxType type)
 	{
 	#ifdef MOCHI_WINDOWS
-		MessageBoxW(nullptr, message.data(), caption.data(), GetMessageBoxType(type));
+		MessageBoxW(g_WindowHWND, message.data(), caption.data(), GetMessageBoxType(type));
 	#endif
 	}
 }
