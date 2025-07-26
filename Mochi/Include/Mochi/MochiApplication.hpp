@@ -38,7 +38,7 @@ namespace Mochi
 		const Vector2<int>& GetWindowPosition() const { return m_WindowPosition; }
 	protected:
 		virtual bool OnBeforeApplicationInit() { return true; }
-		virtual bool OnApplicationInit() { return false; }
+		virtual bool OnApplicationInit() { return true; }
 		virtual void OnApplicationRender() {}
 		virtual void OnApplicationShutdown() {}
 

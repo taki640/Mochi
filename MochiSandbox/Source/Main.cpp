@@ -28,9 +28,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR lpCmdLine,
 	info.WindowPositionCenter = true;
 
 	Application app;
-	app.Init(info);
-	app.Run();
-	app.Shutdown();
-
-	return 0;
+	return app.Run(info);
 }
