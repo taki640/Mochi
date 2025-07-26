@@ -189,10 +189,10 @@ namespace Mochi
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO();
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-		io.ConfigFlags |= initInfo.EnableDocking   ? ImGuiConfigFlags_DockingEnable   : ImGuiConfigFlags_None;
-		io.ConfigFlags |= initInfo.EnableViewports ? ImGuiConfigFlags_ViewportsEnable : ImGuiConfigFlags_None;
+		io.ConfigFlags |= initInfo.EnableKeyboardNavigation ? ImGuiConfigFlags_NavEnableKeyboard : ImGuiConfigFlags_None;
+		io.ConfigFlags |= initInfo.EnableGamepadNavigation  ? ImGuiConfigFlags_NavEnableGamepad  : ImGuiConfigFlags_None;
+		io.ConfigFlags |= initInfo.EnableDocking            ? ImGuiConfigFlags_DockingEnable     : ImGuiConfigFlags_None;
+		io.ConfigFlags |= initInfo.EnableViewports          ? ImGuiConfigFlags_ViewportsEnable   : ImGuiConfigFlags_None;
 
 		if (!initInfo.ImGuiConfigurationFilename.empty())
 		{

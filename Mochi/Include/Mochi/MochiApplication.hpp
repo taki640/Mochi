@@ -18,6 +18,8 @@ namespace Mochi
 		ApplicationIcon Icon;									// The icon that appears on the window and taskbar.
 		bool EnableDocking = true;								// Enable ImGui docking feature.
 		bool EnableViewports = true;							// Enable ImGui viewports feature.
+		bool EnableKeyboardNavigation = true;					// Enable ImGui keyboard navigation feature.
+		bool EnableGamepadNavigation = true;					// Enable ImGui gamepad navigation feature.
 		std::string ImGuiConfigurationFilename = "imgui.ini";	// Set to empty to not save a imgui configuration file.
 		BaseFont* Font = nullptr;								// A MemoryFont or FileFont (see Font.hpp), if nullptr the default imgui font is loaded
 	};
