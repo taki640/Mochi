@@ -63,6 +63,24 @@ namespace Mochi
 		return result;
 	}
 
+	static void ToUTF8(const std::wstring& wstr, std::string& outStr)
+	{
+	#ifdef MOCHI_WINDOWS
+		int size = WideCharToMultiByte(CP_UTF8, 0, wstr.data(), (int)wstr.size(), nullptr, 0, nullptr, nullptr);
+		outStr.resize(size);
+		WideCharToMultiByte(CP_UTF8, 0, wstr.data(), (int)wstr.size(), outStr.data(), size, nullptr, nullptr);
+	#endif
+	}
+
+	static void ToWideString(const std::string& str, std::wstring& outWstr)
+	{
+	#ifdef MOCHI_WINDOWS
+		int size = MultiByteToWideChar(CP_UTF8, 0, str.data(), (int)str.size(), nullptr, 0);
+		outWstr.resize(size);
+		MultiByteToWideChar(CP_UTF8, 0, str.data(), (int)str.size(), outWstr.data(), size);
+	#endif
+	}
+
 	bool OpenFileDialog(std::wstring& outPath, std::span<const FileDialogFilter> filters, int filterIndex, bool normalizePath)
 	{
 	#ifdef MOCHI_WINDOWS
@@ -96,12 +114,8 @@ namespace Mochi
 		std::wstring widePath;
 		if (OpenFileDialog(widePath, filters, filterIndex, normalizePath))
 		{
-		#ifdef MOCHI_WINDOWS
-			int size = WideCharToMultiByte(CP_UTF8, 0, widePath.data(), (int)widePath.size(), nullptr, 0, nullptr, nullptr);
-			outPath.resize(size);
-			WideCharToMultiByte(CP_UTF8, 0, widePath.data(), (int)widePath.size(), outPath.data(), size, nullptr, nullptr);
+			ToUTF8(widePath, outPath);
 			return true;
-		#endif
 		}
 
 		return false;
@@ -167,17 +181,63 @@ namespace Mochi
 		std::vector<std::wstring> widePaths;
 		if (OpenFileDialog(widePaths, filters, filterIndex, normalizePaths))
 		{
-		#ifdef MOCHI_WINDOWS
 			for (const std::wstring& widePath : widePaths)
 			{
 				std::string& outPath = outPaths.emplace_back();
-				int size = WideCharToMultiByte(CP_UTF8, 0, widePath.data(), (int)widePath.size(), nullptr, 0, nullptr, nullptr);
-				outPath.resize(size);
-				WideCharToMultiByte(CP_UTF8, 0, widePath.data(), (int)widePath.size(), outPath.data(), size, nullptr, nullptr);
+				ToUTF8(widePath, outPath);
 			}
 
 			return true;
-		#endif
+		}
+
+		return false;
+	}
+
+	bool SaveFileDialog(std::wstring& outPath, const wchar_t* defaultExtension, std::span<const FileDialogFilter> filters, int filterIndex, bool normalizePath)
+	{
+	#ifdef MOCHI_WINDOWS
+		OPENFILENAMEW openFileName;
+		WCHAR sizeFile[MAX_PATH] = { 0 };
+		ZeroMemory(&openFileName, sizeof(OPENFILENAMEW));
+		openFileName.lStructSize = sizeof(OPENFILENAMEW);
+		openFileName.hwndOwner = g_WindowHWND;
+		openFileName.lpstrFile = sizeFile;
+		openFileName.nMaxFile = sizeof(sizeFile);
+
+		std::wstring filter = BuildFileDialogWindowsFilter(filters);
+		openFileName.lpstrFilter = filter.c_str();
+		openFileName.nFilterIndex = filterIndex + 1;
+
+		openFileName.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_OVERWRITEPROMPT;
+
+		if (GetSaveFileNameW(&openFileName) == TRUE)
+		{
+			outPath = openFileName.lpstrFile;
+			// We need to do this because only the first three characters of lpstrDefExt are appended
+			if (openFileName.nFileExtension == 0 && defaultExtension != nullptr)
+				outPath += defaultExtension;
+
+			if (normalizePath)
+				std::replace(outPath.begin(), outPath.end(), '\\', '/');
+
+			return true;
+		}
+	#endif
+
+		return false;
+	}
+
+	bool SaveFileDialogUTF8(std::string& outPath, const char* defaultExtension, std::span<const FileDialogFilter> filters, int filterIndex, bool normalizePath)
+	{
+		std::wstring widePath;
+		std::wstring wideDefaultExtension;
+		if (defaultExtension != nullptr)
+			ToWideString(defaultExtension, wideDefaultExtension);
+
+		if (SaveFileDialog(widePath, wideDefaultExtension.empty() ? nullptr : wideDefaultExtension.c_str(), filters, filterIndex, normalizePath))
+		{
+			ToUTF8(widePath, outPath);
+			return true;
 		}
 
 		return false;

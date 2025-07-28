@@ -19,6 +19,9 @@ namespace Mochi
 	bool OpenFileDialog(std::vector<std::wstring>& outPaths, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePaths = false);
 	bool OpenFileDialogUTF8(std::vector<std::string>& outPaths, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePaths = false);
 
+	bool SaveFileDialog(std::wstring& outPath, const wchar_t* defaultExtension = nullptr, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePath = false);
+	bool SaveFileDialogUTF8(std::string& outPath, const char* defaultExtension = nullptr, std::span<const FileDialogFilter> filters = std::span<const FileDialogFilter>(), int filterIndex = 0, bool normalizePath = false);
+
 	enum class MessageBoxType
 	{
 		INFO,
