@@ -26,7 +26,7 @@ namespace Mochi
 	{
 		INFO,
 		WARNING,
-		ERROR
+		ERROR_
 	};
 
 	void ShowMessageBox(const std::string& message, const std::string& caption, MessageBoxType type);

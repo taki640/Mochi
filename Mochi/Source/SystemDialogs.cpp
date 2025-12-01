@@ -251,9 +251,9 @@ namespace Mochi
 	#ifdef MOCHI_WINDOWS
 		switch (type)
 		{
-			case MessageBoxType::INFO:		return MB_ICONINFORMATION;
-			case MessageBoxType::WARNING:	return MB_ICONWARNING;
-			case MessageBoxType::ERROR:		return MB_ICONERROR;
+			case MessageBoxType::INFO:      return MB_ICONINFORMATION;
+			case MessageBoxType::WARNING:   return MB_ICONWARNING;
+			case MessageBoxType::ERROR_:    return MB_ICONERROR;
 		}
 	#endif
 
