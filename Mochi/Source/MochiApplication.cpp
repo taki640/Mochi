@@ -207,6 +207,8 @@ namespace Mochi
 
 		if (initInfo.Font != nullptr)
 			initInfo.Font->Load();
+		else
+			io.Fonts->AddFontDefaultVector();
 
 		ImGui::StyleColorsDark();
 		Internal::SetModernColors();
