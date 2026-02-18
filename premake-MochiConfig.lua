@@ -8,7 +8,7 @@ function MochiApplicationWorkspace(mochiPath, wksName, startProjectName, clientP
     workspace (wksName)
         architecture "x64"
         startproject (startProjectName)
-        flags "MultiprocessorCompile"
+        multiprocessorcompile "on"
         configurations {
             "Debug",
             "Release",

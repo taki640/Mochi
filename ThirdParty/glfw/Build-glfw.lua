@@ -84,16 +84,10 @@ project "GLFW"
 			"glfw/src/osmesa_context.c"
 		}
 
-		defines { 
+		defines {
 			"_GLFW_WIN32",
 			"_CRT_SECURE_NO_WARNINGS"
 		}
-
-	filter { "system:windows", "configurations:Debug-AS" }	
-		runtime "Debug"
-		symbols "on"
-		sanitize { "Address" }
-		flags { "NoRuntimeChecks", "NoIncrementalLink" }
 
 	filter (MOCHI_DEBUG_FILTER)
 		runtime "Debug"
